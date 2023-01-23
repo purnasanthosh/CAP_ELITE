@@ -1,0 +1,43 @@
+Given a string 's'. The task is to find the smallest window length that contains all the characters of the given string at least one time.
+For eg. A = aabcbcdbca, then the result would be 4 as of the smallest window will be dbca.
+
+ 
+
+Example 1:
+
+Input : "AABBBCBBAC"
+Output : 3
+Explanation : Sub-string -> "BAC"
+JAVA CODE:
+class Solution {
+    public int findSubString( String str) {
+        Set<Character> set=new HashSet<>();
+        for(int i=0;i<str.length();i++){
+            set.add(str.charAt(i));
+        }
+        Map<Character,Integer> map=new HashMap<>();
+        
+        int left=0,right=0,min=str.length(),count=0;
+        
+        while(right<str.length()){
+            if(!map.containsKey(str.charAt(right))){
+                map.put(str.charAt(right),1);
+                count++;
+            }
+            else{
+                map.put(str.charAt(right),map.get(str.charAt(right))+1);
+            }
+            if(count==set.size()){
+                while(map.get(str.charAt(left))>1){
+                    map.put(str.charAt(left),map.get(str.charAt(left))-1);
+                    left++;
+            }
+                 min=Math.min(min,right-left+1);
+            }
+            right++;
+        }
+        return min;
+        
+        
+    }
+}
