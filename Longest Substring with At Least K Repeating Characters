@@ -1,0 +1,33 @@
+Given a string s and an integer k, return the length of the longest substring of s such that the frequency of each character in this substring is greater than or equal to k.
+
+ 
+
+Example 1:
+
+Input: s = "aaabb", k = 3
+Output: 3
+Explanation: The longest substring is "aaa", as 'a' is repeated 3 times.
+Example 2:
+
+Input: s = "ababbc", k = 2
+Output: 5
+Explanation: The longest substring is "ababb", as 'a' is repeated 2 times and 'b' is repeated 3 times.
+JAVA CODE:
+class Solution {
+    public int longestSubstring(String s, int k) {
+        if(k==0 || k==1) return s.length();
+        if(k>s.length()) return 0;
+        Map<Character,Integer> map=new HashMap<>();
+        for(int i=0;i<s.length();i++){
+            map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+        }
+        int value=0;
+        while(value<s.length()  && map.get(s.charAt(value))>=k)  value++;
+        if(value==s.length()) return value;
+        int s1=longestSubstring(s.substring(0,value),k);
+        int s2=longestSubstring(s.substring(value+1), k);
+        return Math.max(s1,s2);
+
+        
+    }
+}
