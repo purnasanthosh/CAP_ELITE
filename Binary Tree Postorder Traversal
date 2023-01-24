@@ -1,0 +1,75 @@
+Given the root of a binary tree, return the postorder traversal of its nodes' values.
+Example 1:
+Input: root = [1,null,2,3]
+Output: [3,2,1]
+Example 2:
+Input: root = []
+Output: []
+JAVA RECURSIVE CODE:
+class Solution {
+    public void postorder(TreeNode root,List<Integer>list){
+        if(root==null) return;
+        postorder(root.left,list);
+       postorder(root.right,list);
+        list.add(root.val);
+
+    }
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list=new ArrayList<>();
+        postorder(root,list);
+        return list;
+        
+    }
+}
+JAVA NON-RECURSIVE CODE USING 2 STACKS:
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list=new ArrayList<>();
+        if(root==null) return list;
+        Stack<TreeNode> st1=new Stack<>();
+        Stack<TreeNode> st2=new Stack<>();
+        st1.push(root);
+        while(!st1.isEmpty()){
+            root=st1.pop();
+            st2.push(root);
+            if(root.left!=null) st1.push(root.left);
+            if(root.right!=null) st1.push(root.right);
+        }
+        while(!st2.isEmpty()){
+            list.add(st2.pop().val);
+        }
+        return list;
+        
+    }
+}
+JAVA NON-RECURSIVE CODE USING 1 STACK:
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> list=new ArrayList<>();
+        if(root==null) return list;
+        Stack<TreeNode> st=new Stack<>();
+        TreeNode cur=root;
+        while(cur!=null || !st.isEmpty()){
+            if(cur!=null){
+                st.push(cur);
+                cur=cur.left;
+            }
+            else{
+               TreeNode temp=st.peek().right;
+                if(temp==null){
+                    temp=st.pop();
+                    list.add(temp.val);
+                    while(!st.isEmpty() && temp==st.peek().right){
+                        temp=st.pop();
+                        list.add(temp.val);
+                    }
+                }
+                else{
+                    cur=temp;
+                }
+            }
+        }
+        return list;
+        
+    }
+}
