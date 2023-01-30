@@ -1,0 +1,55 @@
+Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
+For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).
+The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.
+Return the vertical order traversal of the binary tree.
+Example :
+Input: root = [1,2,3,4,6,5,7]
+Output: [[4],[2],[1,5,6],[3],[7]]
+Explanation:
+This case is the exact same as example 2, but with nodes 5 and 6 swapped.
+Note that the solution remains the same since 5 and 6 are in the same location and should be ordered by their values.
+JAVA CODE:
+class pair{
+    TreeNode node;
+    int vertical;
+    int level;
+    public pair(TreeNode n,int v,int l){
+        node=n;
+        vertical=v;
+        level=l;
+    }
+}
+class Solution {
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        Map<Integer,Map<Integer,PriorityQueue<Integer>>> map=new TreeMap<>();
+        Queue<pair> q=new LinkedList<>();
+        q.add(new pair(root,0,0));
+        while(!q.isEmpty()){
+            pair top=q.poll();
+            TreeNode node=top.node;
+            int vertical=top.vertical;
+            int level=top.level;
+            if(!map.containsKey(vertical)){
+                map.put(vertical,new TreeMap<>());
+            } 
+            if(!map.get(vertical).containsKey(level)){
+                 map.get(vertical).put(level,new PriorityQueue<>());
+            }
+            map.get(vertical).get(level).add(node.val);
+            if(node.left!=null) q.add(new pair(node.left,vertical-1,level+1));
+            if(node.right!=null) q.add(new pair(node.right,vertical+1,level+1));
+        }
+        List<List<Integer>> list=new ArrayList<>();
+        for(Map<Integer,PriorityQueue<Integer>> entry:map.values()){
+            list.add(new ArrayList<>());
+            for(PriorityQueue<Integer> entry1:entry.values()){
+                while(!entry1.isEmpty()){
+                    list.get(list.size()-1).add(entry1.poll());
+                }
+            }
+        }
+        return list;
+    }
+}
+
+ 
