@@ -1,0 +1,65 @@
+Given the root of a binary tree, the value of a target node target, and an integer k, return an array of the values of all nodes that have a distance k from the target node.
+You can return the answer in any order.
+Example 1:
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+Output: [7,4,1]
+Explanation: The nodes that are a distance 2 from the target node (with value 5) have values 7, 4, and 1.
+JAVA CODE:
+class Solution {
+    public void markparent(TreeNode root,Map<TreeNode,TreeNode>map,TreeNode target){
+        Queue<TreeNode> q=new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            TreeNode node=q.poll();
+            if(node.left!=null){
+                map.put(node.left,node);
+                q.add(node.left);
+            }
+            if(node.right!=null){
+                map.put(node.right,node);
+                q.add(node.right);
+            }
+        }
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+
+    Map<TreeNode,TreeNode> parent=new HashMap<>();
+    markparent(root,parent,target);
+    Queue<TreeNode> q=new LinkedList<>();
+    Map<TreeNode,Boolean> visited=new HashMap<>();
+    q.add(target);
+    visited.put(target,true);
+    int distance=0;
+    while(!q.isEmpty()){
+        if(distance==k) break;
+        distance++;
+        int size=q.size();
+        for(int i=0;i<size;i++){
+             TreeNode node=q.poll();
+        if(node.left!=null && visited.get(node.left)==null) {
+            visited.put(node.left,true);
+            q.add(node.left);
+        }
+        if(node.right!=null && visited.get(node.right)==null) {
+            visited.put(node.right,true);
+            q.add(node.right);
+        }
+        if(parent.get(node)!=null && visited.get(parent.get(node))==null) {
+            visited.put(parent.get(node),true);
+            q.add(parent.get(node));
+        }
+
+        }
+    
+    }
+    List<Integer> list=new ArrayList<>();
+
+    while(!q.isEmpty()){
+        TreeNode node=q.poll();
+        list.add(node.val);
+    }
+    return list;     
+    }
+}
+
+ 
