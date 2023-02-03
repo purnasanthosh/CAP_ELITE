@@ -1,0 +1,32 @@
+Given the head of a singly linked list where elements are sorted in ascending order, convert it to a height-balanced binary search tree. 
+Example 1:
+Input: head = [-10,-3,0,5,9]
+Output: [0,-3,9,-10,null,5]
+Explanation: One possible answer is [0,-3,9,-10,null,5], which represents the shown height balanced BST.
+Example 2:
+
+Input: head = []
+Output: []
+JAVA CODE:
+class Solution {
+    public TreeNode construct(List<Integer> list,int low,int high){
+        if(low>high) return null;
+        int mid=low+(high-low)/2;
+        TreeNode root=new TreeNode(list.get(mid));
+        root.left=construct(list,low,mid-1);
+        root.right=construct(list,mid+1,high);
+        return root;
+
+    }
+    public TreeNode sortedListToBST(ListNode head) {
+        List<Integer> list=new ArrayList<>();
+        ListNode curr=head;
+        while(curr!=null){
+            list.add(curr.val);
+            curr=curr.next;
+        }
+        TreeNode root=construct(list,0,list.size()-1);
+        return root;
+        
+    }
+}
