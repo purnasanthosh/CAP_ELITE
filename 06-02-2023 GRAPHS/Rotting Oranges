@@ -1,0 +1,85 @@
+You are given an m x n grid where each cell can have one of three values:
+
+0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+ 
+
+Example 1:
+
+
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+Example 2:
+
+Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+Output: -1
+Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+Example 3:
+
+Input: grid = [[0,2]]
+Output: 0
+Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
+JAVA BFS CODE:
+class pair{
+    int row;
+    int col;
+    int step;
+    public pair(int r,int c,int st){
+        row=r;
+        col=c;
+        step=st;
+    }
+}
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int m=grid.length;
+        int n=grid[0].length;
+        int res=0,count=0,freshcount=0;
+        Queue<pair> q=new LinkedList<>();
+        int [][] vis=new int[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if( grid[i][j]==2){
+                    q.offer(new pair(i,j,0));
+                    vis[i][j]=1;
+                }
+                if(grid[i][j]==1){
+                    freshcount++;
+                }
+
+            }
+        }
+        int [] delrow={-1,0,1,0};
+        int [] delcol={0,1,0,-1};
+        while(!q.isEmpty()){
+            pair top=q.peek();
+            int row=top.row;
+            int col=top.col;
+            int step=top.step;
+            res=Math.max(res,step);
+            q.poll();
+            for(int k=0;k<4;k++){
+                int newrow=row+delrow[k];
+                int newcol=col+delcol[k];
+                if(newrow>=0 &&  newcol>=0 && newrow<m && newcol<n && vis[newrow][newcol]==0 && grid[newrow][newcol]==1 ){
+                     q.offer(new pair(newrow,newcol,step+1));
+                     vis[newrow][newcol]=1;
+                     count++;
+
+                }
+               
+            }
+
+        }
+        if(count==freshcount) return res;
+        return -1;
+
+
+        
+    }
+}
