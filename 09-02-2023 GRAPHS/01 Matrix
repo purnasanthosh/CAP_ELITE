@@ -1,0 +1,68 @@
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+
+ 
+
+Example 1:
+
+
+Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
+Output: [[0,0,0],[0,1,0],[0,0,0]]
+Example 2:
+
+
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+JAVA CODE:
+class pair{
+    int row;
+    int col;
+    int step;
+    public pair(int r,int c,int st){
+        row=r;
+        col=c;
+        step=st;
+    }
+}
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int m=mat.length,n=mat[0].length;
+        Queue<pair> q=new  LinkedList<>();
+        int [][] vis=new int[m][n];
+        int [][] dis=new int[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(vis[i][j]==0 && mat[i][j]==0){
+                    q.offer(new pair(i,j,0));
+                    vis[i][j]=1;
+                }
+            }
+        }
+
+        while(!q.isEmpty()){
+            pair top=q.peek();
+            int row=top.row;
+            int col=top.col;
+            int step=top.step;
+            q.poll();
+            dis[row][col]=step;
+            int [] delrow={-1,0,1,0};
+            int [] delcol={0,1,0,-1};
+            for(int k=0;k<4;k++){
+                int newrow=row+delrow[k];
+                int newcol=col+delcol[k];
+                if(newrow>=0 && newcol>=0 && newrow<m && newcol<n && vis[newrow][newcol]==0 && mat[newrow][newcol]==1){
+                    q.offer(new pair(newrow,newcol,step+1));
+                    vis[newrow][newcol]=1;
+
+                }
+            }
+
+        }
+        return dis;
+
+
+        
+    }
+}
