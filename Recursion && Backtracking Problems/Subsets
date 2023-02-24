@@ -54,3 +54,7 @@ class Solution {
         
     }
 }
+✔️ Complexity Analysis:
+
+TC: O(n * 2^n), as every element has two options-to pick or not pick and n bcz we are copying the list of size n in base case.
+SC: O(n * 2^n)
